@@ -19,7 +19,5 @@
 
 1. We provide the Knowledge Base dictionary in  *MoH_Dict.pkl*  file. 
 
-2. Pre-processing for each dataset can be done using the *MoH_KB.py* file. 
-
-3. Save the preprocessed data and run it through *BertBasedModel.py* for final classification. 
+2. Pre-processing for each dataset and fine tuning it through the *main.py* file for final classification. 
 
