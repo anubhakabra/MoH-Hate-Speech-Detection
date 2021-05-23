@@ -173,7 +173,7 @@ def load_data(data_type):
 
 def load_mapping_dictionary():
 
-    with open(PATH + "MoH_Dict.pickle", "rb") as handle:
+    with open(os.path.join(PATH, "MoH_Dict.pickle", "rb")) as handle:
         mapper_dict: Dict = pickle.load(handle)
 
     return mapper_dict
