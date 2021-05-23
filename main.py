@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_score, recall_score, f1_score
 
 from utils import *
-from model.muril import model_train
+from model.model import model_train
 
 
 parser = argparse.ArgumentParser()
