@@ -74,6 +74,7 @@ def disambiguation(mapper_dict, text):
                     tokens[i] = mapper_dict[tokens[i]]
 
             if not english_label and rom_hindi_label:
+                dev_hindi_label = True
                 tokens[i] = mapper_dict[tokens[i]]
 
         if not dev_hindi_label and not english_label:
