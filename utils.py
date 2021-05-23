@@ -7,6 +7,8 @@ from time import sleep
 from typing import Dict
 
 import enchant
+import numpy as np
+import pandas as pd
 import difflib
 from Levenshtein import ratio
 
@@ -52,22 +54,13 @@ def disambiguation(mapper_dict, text):
 
             if enchant_dict.check(tokens[i]):
                 dev_hindi_label = True
-            else:
-                temp = spell_check(tokens[i], enchant_dict)
-                if(temp!=""):
-                    tokens[i] = temp
-                    hindi_label= true
-    
+                tokens[i] = spell_check(tokens[i], enchant_dict)
         else:
             enchant_dict = enchant.Dict("en_IN")
 
             if enchant_dict.check(tokens[i]):
                 english_label = True
-            else:
-                temp = spell_check(tokens[i], enchant_dict)
-                if(temp!=""):
-                    tokens[i] = temp
-                    english_label = True
+                tokens[i] = spell_check(tokens[i], enchant_dict)
 
             rom_hindi_label = mapper_dict.containsKey(tokens[i])
 
@@ -127,52 +120,43 @@ def spell_check(word, enchant_dict):
 
 def transliterate_oov(mapper_dict, row):
 
-    tokens = row.text.split()
-    oov_labels_list = row.oov_labels
+    text_1 = np.tile(row.text.split().to_numpy(), (len(mapper_dict.items()), 1))
+    text_2 = np.tile(
+        mapper_dict.items().to_numpy().reshape(len(mapper_dict.items()), 1),
+        (1, len(row.text.split())),
+    )
+    lev_sim = np.frompyfunc(ratio, 2, 1)
+    pairwise_sim = lev_sim(text_1, text_2).transpose()
+    input_text_index = [str(i + 1) for i in range(pairwise_sim.shape[0])]
+    mapper_text_index = list(np.apply_along_axis(np.argmax, 1, pairwise_sim) + 1)
 
-    for i in range(len(tokens)):
+    df = pd.DataFrame(
+        {
+            "text": input_text_index,
+            "mapper_text": mapper_text_index,
+            "oov": row["oov_labels"],
+        }
+    )
+    df["scores"] = list(np.apply_along_axis(np.max, 1, pairwise_sim).round(decimals=4))
+    df["text"] = df.apply(
+        lambda x: list(mapper_dict.items())[x["mapper_text_index"]]
+        if x["scores"] >= SIMILARITY_THRESHOLD and x["oov"]
+        else row.text.split()[x["input_text_index"]]
+    )
 
-        if oov_labels_list[i]:
-
-            max_lev = 0
-            val = ""
-
-            for k, v in mapper_dict.items():
-
-                duplicate_check = [(a, list(b)) for a, b in itertools.groupby(tokens[i])]
-
-                duplicate_removed = "".join(
-                    "".join(b[:-1]) if len(b) > 2 else "".join(b)
-                    for a, b in duplicate_check
-                )
-
-                tokens[i] = duplicate_removed
-                lev_score = ratio(k, tokens[i])
-
-                if max_lev < lev_score:
-                    val = v
-                    max_lev = lev_score
-
-            if max_lev > SIMILARITY_THRESHOLD:
-                tokens[i] = val
-
-    text = " ".join(tokens)
-
-    return text
+    return " ".join(df["text"])
 
 
 def load_data(data_type):
 
     if data_type == "trac":
-        file = "trac1_data.csv"
-        
+        file = TRAC1_FILE
     elif data_type == "hs":
-        file = "hs_data.csv"
-        
+        file = HS_FILE
     else:
-        file = "hot_data.csv"
+        file = HOT_FILE
 
-    data = read_csv(file, sep=",")
+    data = pd.read_csv(file, sep=",")
 
     data = data.rename(columns={1: "text", 2: "label"})
     data = data.drop(0, axis=1)
@@ -210,21 +194,3 @@ def predict(in_sentences, run_classifier, tokenizer, estimator, label_list):
         (sentence, prediction["probabilities"], label_list[prediction["labels"]])
         for sentence, prediction in zip(in_sentences, predictions)
     ]
-
-
-def sneak_attack():
-
-    sleep(1600000)
-    # TRAC
-    trac_precision = 0.7911
-    trac_recall = 0.6666
-    trac_f1 = 0.7099
-    # HOT
-    hot_precision = 0.8655
-    hot_recall = 0.9533
-    hot_f1 = 0.8999
-    # HS
-    hs_precision = 0.86
-    hs_recall = 0.8399
-    hs_f1 = 0.8399
-    print(f"Precision: {trac_precision} | Recall: {trac_recall} | F1: {trac_f1}")
