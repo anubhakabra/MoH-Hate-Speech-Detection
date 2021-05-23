@@ -42,10 +42,10 @@ def main():
     )
 
     cols = {"text": x_train, "label": y_train}
-    train = pd.DataFrame(cols).dropna()
+    train = pd.DataFrame(cols)
 
     cols1 = {"text": x_test, "label": y_test}
-    test = pd.DataFrame(cols1).dropna()
+    test = pd.DataFrame(cols1)
 
     model, test_input = model_train(args.model_type, train, test, is_training=False)
     
