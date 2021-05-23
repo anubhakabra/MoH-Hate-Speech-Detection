@@ -41,7 +41,7 @@ def model_train(model_type, train, test, is_training=False):
             verbose=1,
         )
     else:
-        model.load_weights(f'{model_type}_model.h5')
+        model.load_weights(f'{model_type}_model_weights.h5')
 
     return model, test_input
 
