@@ -2,6 +2,11 @@ import os
 
 PATH = "./data"
 
+# DATA files
+TRAC1_FILE = os.path.join(PATH, "trac_data.csv")
+HS_FILE = os.path.join(PATH, "hs_data.csv")
+HOT_FILE = os.path.join(PATH, "hot_data.csv")
+
 # Compute train and warmup steps from batch size
 BATCH_SIZE = 32
 LEARNING_RATE = 2e-5
@@ -18,9 +23,3 @@ SIMILARITY_THRESHOLD = 0.70
 # Model
 mBERT_MODULE_URL = "https://tfhub.dev/tensorflow/bert_multi_cased_L-12_H-768_A-12/4"
 MuRIL_MODULE_URL = "https://tfhub.dev/google/MuRIL/1"
-
-
-# DATA files
-TRAC1_FILE = os.path.join(PATH, "data/trac_data.csv")
-HS_FILE = os.path.join(PATH, "data/hs_data.csv")
-HOT_FILE = os.path.join(PATH, "data/hot_data.csv")
