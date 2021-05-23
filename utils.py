@@ -152,10 +152,18 @@ def transliterate_oov(mapper_dict, row):
     return text
 
 
-def load_data():
+def load_data(data_type):
 
-    with open(os.path.join(PATH, "total_dfdeepanshu_mapper.pickle"), "rb") as handle:
-        data = pickle.load(handle)
+    if data_type == "trac":
+        file = TRAC1_FILE
+        
+    elif data_type == "hs":
+        file = HS_FILE
+        
+    else:
+        file = HOT_FILE
+
+    data = read_csv(file, sep=",")
 
     data = data.rename(columns={1: "text", 2: "label"})
     data = data.drop(0, axis=1)
