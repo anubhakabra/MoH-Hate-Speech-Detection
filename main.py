@@ -60,5 +60,5 @@ def main():
     f1 = f1_score(y_true, pred_labels)
 
     print()
-    print("Precision: %.4f | Recall: %.4f | F1: %.4f" % (trac_precision, trac_recall, trac_f1))
+    print("Precision: %.4f | Recall: %.4f | F1: %.4f" % (precision, recall, f1))
     print()
