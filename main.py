@@ -11,6 +11,9 @@ from model.muril import model_train
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
+    "--data", type=str, default="trac", help="Options: trac, hs, hot"
+)
+parser.add_argument(
     "--model_type", type=str, default="muril", help="Options: bert, muril"
 )
 
@@ -19,7 +22,7 @@ args = parser.parse_args()
 
 def main():
 
-    data = load_data()
+    data = load_data(args.data)
     
     print("############ Data Loaded #############")
     
@@ -57,5 +60,5 @@ def main():
     f1 = f1_score(y_true, pred_labels)
 
     print()
-    print(f"Precision: {trac_precision} | Recall: {trac_recall} | F1: {trac_f1}")
+    print("Precision: %.4f | Recall: %.4f | F1: %.4f" % (trac_precision, trac_recall, trac_f1))
     print()
