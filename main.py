@@ -20,6 +20,9 @@ args = parser.parse_args()
 def main():
 
     data = load_data()
+    
+    print("############ Data Loaded #############")
+    
     data = data.dropna()
 
     data["text"] = data["text"].apply(preprocess)
@@ -42,6 +45,8 @@ def main():
     test = pd.DataFrame(cols1).dropna()
 
     model, test_input = model_train(args.model_type, train, test, is_training=False)
+    
+    print("############ Model Loaded ############")
 
     pred_labels = model.predict(test_input)
 
@@ -51,4 +56,6 @@ def main():
     recall = recall_score(y_true, pred_labels)
     f1 = f1_score(y_true, pred_labels)
 
-    print(f"Precision: %.2f | Recall: %.4f | F1: %.4f" % precision % recall %f1)
+    print()
+    print(f"Precision: {trac_precision} | Recall: {trac_recall} | F1: {trac_f1}")
+    print()
