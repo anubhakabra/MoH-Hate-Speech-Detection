@@ -164,13 +164,13 @@ def transliterate_oov(mapper_dict, row):
 def load_data(data_type):
 
     if data_type == "trac":
-        file = TRAC1_FILE
+        file = "trac1_data.csv"
         
     elif data_type == "hs":
-        file = HS_FILE
+        file = "hs_data.csv"
         
     else:
-        file = HOT_FILE
+        file = "hot_data.csv"
 
     data = read_csv(file, sep=",")
 
