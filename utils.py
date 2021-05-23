@@ -52,7 +52,7 @@ def disambiguation(mapper_dict, text):
 
             if enchant_dict.check(tokens[i]):
                 dev_hindi_label = True
-                tokens[i] = spell_check(tokens[i], enchant_dict)
+            tokens[i] = spell_check(tokens[i], enchant_dict)
         else:
             enchant_dict = enchant.Dict("en_IN")
 
