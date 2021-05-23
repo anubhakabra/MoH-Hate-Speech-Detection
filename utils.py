@@ -52,13 +52,22 @@ def disambiguation(mapper_dict, text):
 
             if enchant_dict.check(tokens[i]):
                 dev_hindi_label = True
-            tokens[i] = spell_check(tokens[i], enchant_dict)
+            else:
+                temp = spell_check(tokens[i], enchant_dict)
+                if(temp!=""):
+                    tokens[i] = temp
+                    hindi_label= true
+    
         else:
             enchant_dict = enchant.Dict("en_IN")
 
             if enchant_dict.check(tokens[i]):
                 english_label = True
-                tokens[i] = spell_check(tokens[i], enchant_dict)
+            else:
+                temp = spell_check(tokens[i], enchant_dict)
+                if(temp!=""):
+                    tokens[i] = temp
+                    english_label = True
 
             rom_hindi_label = mapper_dict.containsKey(tokens[i])
 
