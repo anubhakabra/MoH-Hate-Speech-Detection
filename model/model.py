@@ -26,7 +26,8 @@ def model_train(model_type, train, test, is_training=False):
         train_labels = keras.utils.to_categorical(train.label.values, num_classes=len(label_list))
 
         checkpoint = tf.keras.callbacks.ModelCheckpoint(
-            f"{model_type}_model.h5", monitor="val_accuracy", save_best_only=True, verbose=1
+            f"{model_type}_model_weights_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.h5", 
+            monitor="val_accuracy", save_best_only=True, verbose=1
         )
         earlystopping = tf.keras.callbacks.EarlyStopping(
             monitor="val_accuracy", patience=5, verbose=1
