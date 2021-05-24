@@ -64,10 +64,10 @@ def disambiguation(mapper_dict, text):
             enchant_dict = enchant.Dict("en_IN")
 
             if enchant_dict.check(tokens[i]):
-                dev_hindi_label = True
+                dev_enlglish_label = True
             else :
                 if(spell_check(tokens[i], enchant_dict)!=""):
-                    dev_hindi_label = True
+                    dev_english_label = True
                     tokens[i] = spell_check(tokens[i]
 
             rom_hindi_label = mapper_dict.containsKey(tokens[i])
