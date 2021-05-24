@@ -51,16 +51,24 @@ def disambiguation(mapper_dict, text):
 
         if check_text_in_devanagari_hindi(tokens[i]):
             enchant_dict = enchant.Dict("hi_IN")
+            
 
             if enchant_dict.check(tokens[i]):
                 dev_hindi_label = True
-                tokens[i] = spell_check(tokens[i], enchant_dict)
+            else :
+                if(spell_check(tokens[i], enchant_dict)!=""):
+                    dev_hindi_label = True
+                    tokens[i] = spell_check(tokens[i]
+                    
         else:
             enchant_dict = enchant.Dict("en_IN")
 
             if enchant_dict.check(tokens[i]):
-                english_label = True
-                tokens[i] = spell_check(tokens[i], enchant_dict)
+                dev_hindi_label = True
+            else :
+                if(spell_check(tokens[i], enchant_dict)!=""):
+                    dev_hindi_label = True
+                    tokens[i] = spell_check(tokens[i]
 
             rom_hindi_label = mapper_dict.containsKey(tokens[i])
 
@@ -79,6 +87,7 @@ def disambiguation(mapper_dict, text):
 
         if not dev_hindi_label and not english_label:
             oov_label = True
+                                            
 
         oov_labels_list.append(oov_label)
 
